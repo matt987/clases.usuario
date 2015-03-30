@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Usuarios</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/cover.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="container-fluid">
+<!--         <div class="col-md-12" id="mensajePrueba">
+          El sistema se encuentra en modo prueba, para cambiar el modo haga click <a href="#" id="modoPrueba">Aqu&iacute;</a>
+        </div> -->
+        <div class="col-md-4">
+          <h3>Ingrese nuevos usuarios al sistema</h3>
+
+          <form id="formUsuario">
+            <input type="hidden" class="form-control" id="idUsuario">
+            <div class="form-group">
+              <label for="nombreUsuario">Nombre</label>
+              <input type="text" class="form-control" id="nombreUsuario" placeholder="Ingrese el nombre del usuario">
+            </div>
+            <div class="form-group">
+              <label for="apellidoUsuario">Apellido</label>
+              <input type="text" class="form-control" id="apellidoUsuario" placeholder="Ingrese el apellido del usuario">
+            </div>
+            <div class="form-group">
+              <label for="ciUsuario">C&eacute;dula de Identidad</label>
+              <input type="text" class="form-control" id="ciUsuario" placeholder="Ingrese el n&uacute;mero de c&eacute;dula del usuario">
+            </div>
+            <div class="form-group">
+              <label for="edadUsuario">Edad</label>
+              <input type="number" class="form-control" id="edadUsuario" placeholder="Ingrese la edad del usuario">
+            </div>            
+            <div class="form-group">
+              <label for="direccionUsuario">Direcci&oacute;n</label>
+              <input type="text" class="form-control" id="direccionUsuario" placeholder="Ingrese la direcci&oacute;n del usuario">
+            </div>            
+            <div class="form-group">
+              <label for="emailUsuario">Email</label>
+              <input type="email" class="form-control" id="emailUsuario" placeholder="Ingrese la direcci&oacute;n de e-mail del usuario">
+            </div>            
+            <a href="#" id="crearUsuario" class="btn btn-default">Guardar</a>
+          </form>          
+        </div>
+        <div class="col-md-6">
+          <h3>Lista de usuarios</h3>
+          <table class="table table-hover">
+            <thead>
+              <th>Id</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>CI</th>
+              <th>Edad</th>
+              <th>Direcci&oacute;n</th>
+              <th>Email</th>
+              <th>Acciones</th>
+            </thead>
+            <tbody id="listaUsuarios">
+
+            </tbody>
+          </table>
+        </div>
+
+        <div class="col-md-2">
+          <h3>Suma de Edades</h3>
+          <h4 id="sumaEdades"></h4>
+        </div>
+
+        <div><a class="col-md-3 btn btn-danger" href="#" id="limpiarUsuarios">Borrar todos los usuarios</a></div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/Usuario.js"></script>
+    <script src="assets/js/custom.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $("#limpiarUsuarios").hide();
+        init(true);
+
+        // $("#modoPrueba").click(function(){
+        //   init(false);
+        //   $("#mensajePrueba").hide();
+        // });
+
+        $("#crearUsuario").click(function(){
+          var id = $("#idUsuario").val();
+          var nombre= $("#nombreUsuario").val();
+          var apellido= $("#apellidoUsuario").val();
+          var ci= $("#ciUsuario").val();
+          var edad= $("#edadUsuario").val();
+          var direccion= $("#direccionUsuario").val();
+          var email= $("#emailUsuario").val();
+          if (nombre !== "" && apellido !== "" && ci !== "" && edad !== "" && direccion !== "" && email !== ""){
+            guardarUsuario(id,nombre, apellido, ci, edad, direccion, email); 
+          } else {
+            alert("Todos los campos son obligatorios");
+          }
+        });
+
+
+        $(".container-fluid").on('click', '.eliminar',function(){
+          var self = $(this);
+          if (confirm("¿Desea eliminar este registro?")){
+              var usuario = buscarPorId(self.data('id'));
+              if (usuario){
+                eliminarUsuario(usuario);
+              }
+          }
+        })
+
+        $(".container-fluid").on('click', '.editar',function(){
+          var self = $(this);
+          var usuario = buscarPorId(self.data('id'));
+          if (usuario){
+            $("#formUsuario")[0].reset();
+            var id = $("#idUsuario").val(usuario.id);
+            var nombre = $("#nombreUsuario").val(usuario.nombre);
+            var apellido = $("#apellidoUsuario").val(usuario.apellido);
+            var ci = $("#ciUsuario").val(usuario.ci);
+            var edad = $("#edadUsuario").val(usuario.edad);
+            var direccion = $("#direccionUsuario").val(usuario.direccion);
+            var email = $("#emailUsuario").val(usuario.email); 
+            // guardarUsuario(id,nombre, apellido, ci, edad, direccion, email);                      
+          }
+        })
+
+        $("#limpiarUsuarios").click(function(){
+          if (confirm("¿Está seguro que desea eliminar todos los usuarios")){
+            limpiarUsuarios();
+          }
+        })
+      })
+    </script>
+
+  </body>
+</html>
